@@ -1,3 +1,15 @@
 /:
   controller: Base
   action: index
+
+/signup:
+  controller: Auth
+  action: render
+
+/addUser: 
+  controller: Auth
+  action: signup
+
+/createUser:
+  controller: Auth
+  action: createUser

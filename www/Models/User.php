@@ -2,15 +2,38 @@
 
 namespace App\Model;
 
-use App\Core\Database;
 
-class User extends Database
+class User
 {
-    public function __construct() {
-        parent::__construct();
+    protected $id;
+    protected $name;
+    protected $email;
+    protected $password;
+
+    function setName($name){
+        $this->name = $name;
     }
 
+    function setEmail($email){
+        $this->email = $email;
+    }
+    
+    function setPassword($password){
+        $this->password = $password;
+    }
 
-    /*private $id;
-    private $name; */
-}
+    function getId(){ 
+        return $this->id;
+    }
+
+    function getName(){
+        return $this->name;
+    }
+    function getEmail(){
+        return $this->email;
+    }
+
+    function getPassword(){
+        return $this->password;
+    }
+}  
