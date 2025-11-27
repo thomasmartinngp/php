@@ -29,3 +29,12 @@ h1{
 .btn_red{
     background-color: rgb(206, 34, 34);
 }
+
+.center{
+    text-align: center;
+}
+
+.isActiveNav{
+    display: flex;
+    flex-direction: column;
+}

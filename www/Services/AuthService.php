@@ -18,7 +18,6 @@ class AuthService
                     VALUES (:name,:email,:password,\''.date('Y-m-d').'\')';
         $queryPrepared = $pdo->prepare($sql);
         if ($queryPrepared->execute([
-
             "name" => $user->getName(),
             "email" => $user->getEmail(),
             "password" => $user->getPassword()
@@ -28,6 +27,46 @@ class AuthService
             echo"Utilisateur ajouté !";
             return $id;
         } 
+    }
+
+
+    public function getUserDataFromId($userId){
+        $pdo = Database::getInstance()->getConnection();
+        $sql = 'SELECT email, name, is_active, id FROM "user" WHERE id=:id';
+        $queryPrepared = $pdo->prepare($sql);
+        $queryPrepared->execute(["id" => (int)$userId]);
+        $user = $queryPrepared->fetch();
+        return $user;
+    }
+
+    public function updateUserEmail($email, $userId){
+        $user = new User();
+        $user->setEmail($email);
+        $pdo = Database::getInstance()->getConnection();
+        $sql = 'UPDATE "user" SET email=:email WHERE id = :id';
+        $queryPrepared = $pdo->prepare($sql);
+        $queryPrepared->execute(
+        [
+            "email" => $user->getEmail(),
+            "id" => $userId
+        ]
+        );
+    }
+
+
+    public function updateUserName($name, $userId){
+        $user = new User();
+        var_dump($name);
+        $user->setName($name);
+        $pdo = Database::getInstance()->getConnection();
+        $sql = 'UPDATE "user" SET name=:name WHERE id = :id';
+        $queryPrepared = $pdo->prepare($sql);
+        $queryPrepared->execute(
+        [
+            "name" => $user->getName(),
+            "id" => $userId
+        ]
+        );
     }
 
     public function verifyEmail($email){
@@ -66,4 +105,17 @@ class AuthService
         }
         return false;
     }
+
+    public function getIsActiveFromId($userId){
+        $pdo = Database::getInstance()->getConnection();
+        $sql = 'SELECT "is_active" FROM "user" WHERE id=:id';
+        $queryPrepared = $pdo->prepare($sql);
+        $queryPrepared->execute(["id"=>(int)$userId]);
+        $res = $queryPrepared->fetch();
+        if($res){
+            return $res;
+        }
+        return false;
+    } 
+    
 }

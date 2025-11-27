@@ -10,6 +10,7 @@ class User
     protected $email;
     protected $password;
 
+    protected $is_active;
     function setName($name){
         $this->name = $name;
     }
@@ -20,6 +21,10 @@ class User
     
     function setPassword($password){
         $this->password = $password;
+    }
+
+    function setIsActive($data){
+        $this->is_active = $data;
     }
 
     function getId(){ 
@@ -35,5 +40,9 @@ class User
 
     function getPassword(){
         return $this->password;
+    }
+
+    function getIsActive(){
+        return $this->is_active;
     }
 }  

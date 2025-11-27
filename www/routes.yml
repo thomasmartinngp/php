@@ -3,7 +3,6 @@
   controller: Base
   action: index
 
-
 #Auth method/path
 /signup:
   controller: Auth
@@ -25,6 +24,23 @@
   controller: Auth
   action: signin
 
+/updateUser:
+  controller: Auth
+  action: updateUser
+
 /logout:
   controller: Auth
   action: logout
+
+/profil:
+  controller: Auth
+  action: renderProfil
+
+/dashboard:
+  controller: Auth
+  action: renderDashboard
+
+#EmailVerification method/path
+/activation:
+  controller: EmailVerification
+  action: activateAccount
