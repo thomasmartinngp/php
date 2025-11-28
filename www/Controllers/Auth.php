@@ -182,15 +182,10 @@ class Auth extends Base
         $this->isAuth();
         $this->renderPage("dashboard", "backoffice");
     }   
-    
-    public function isAuth(){
-        if(!isset($_SESSION["is_active"]) || $_SESSION["is_active"] !== true){
-            $this->renderHome();
-            exit;
-        }
-    }
+
 
     public function renderUsers() {
+        $this->isAuth();
         $auth = new AuthService();
         $allusers = $auth->getAllUser();
         $this->renderPage("allUser", "backoffice", ["users"=> $allusers]);
@@ -200,5 +195,14 @@ class Auth extends Base
     public function renderResetPassword(){
         $this->renderPage("resetPassword");
     }
+    
+    public function isAuth(){
+        if(!isset($_SESSION["is_active"]) || $_SESSION["is_active"] !== true){
+            $this->renderHome();
+            exit;
+        }
+    }
+
+    
 }
 
