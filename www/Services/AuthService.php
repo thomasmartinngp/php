@@ -53,6 +53,14 @@ class AuthService extends BaseService
     }
 
 
+    public function getAllUser(){
+        $sql = 'SELECT id, name, email FROM "user"';
+        $queryPrepared = $this->pdo->prepare($sql);
+        $queryPrepared->execute();
+        $allUser = $queryPrepared->fetchall();
+        return $allUser;
+    }
+
     public function updateUserName($name, $userId){
         $user = new User();
         $user->setName($name);
@@ -114,6 +122,12 @@ class AuthService extends BaseService
     public function deleteUserByID($userId){
         $sql = 'DELETE FROM "user" WHERE id=:id';
         $queryPrepared = $this->pdo->prepare($sql);
-        $queryPrepared->execute(["id"=>(int)$userId['id']]);
+        $queryPrepared->execute(["id"=>(int)$userId]);
     }
+/* A FIINIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIR
+    public function updateUserPassword($userId, $newPassword){
+        $user = new User();
+        $user->setPassword($newPassword);
+    }
+        */
 }

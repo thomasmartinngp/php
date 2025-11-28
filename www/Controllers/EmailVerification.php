@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\Base;
 use App\Service\EmailVerificationService;
 use App\Service\AuthService;
+use App\Controller\Auth;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -13,6 +14,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 class EmailVerification extends Base
 {
+
+    private $errors = [];
     public function sendVerificationMail($email, $token){
         $activationLink = "http://localhost:8080/activation?email=".$email."&token=".$token;
         $mail = new PHPMailer(true);
@@ -41,8 +44,15 @@ class EmailVerification extends Base
             }
     }
 
-    public function sendResetPwdMail($email, $token){
-        
+    public function sendResetPwdMail($email){
+        $auth = new Auth();
+        $email = $auth->clearEmail($_POST['email']);
+        $verifiyMail = new AuthService();
+        if($verifiyMail->verifyEmail($email)){
+            
+        } else{
+            $this->errors[]= "L'email n'existe déjà en bdd";
+        }
     }
 
     public function activateAccount(){

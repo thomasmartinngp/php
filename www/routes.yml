@@ -32,6 +32,10 @@
   controller: Auth
   action: logout
 
+/deleteUser:
+  controller: Auth
+  action: deleteUser
+
 /profil:
   controller: Auth
   action: renderProfil
@@ -40,7 +44,19 @@
   controller: Auth
   action: renderDashboard
 
+/users:
+  controller: Auth
+  action: renderUsers
+
+/resetPassword:
+  controller: Auth
+  action: renderResetPassword
+
 #EmailVerification method/path
 /activation:
   controller: EmailVerification
   action: activateAccount
+
+/sendNewPassword:
+  controller: EmailVerification
+  action: sendResetPwdMail

@@ -8,4 +8,5 @@
         <input type="text" value="<?= $_SESSION["name"] ?? "" ?>" name="name" placeholder="Votre prénom"><br>
         <input class="btn btn_green" type="submit" value="Modifier">
     </form>
+    <a href="/resetPassword">Reset le mot de passe</a>
 </div>

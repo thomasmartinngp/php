@@ -120,7 +120,6 @@ class Auth extends Base
                 $auth->updateUserName( $name, $_SESSION["id"]);
                 $value = ["name" => $name];
                 $this->setSessionData($value);
-                
             }
         }  
         if($_SESSION['email'] !== $_POST['email']){
@@ -131,7 +130,7 @@ class Auth extends Base
                 $this->setSessionData($value);
             }
         }
-        $this->renderPage("user");
+        $this->renderPage("user", "backoffice");
     }
 
     public function clearEmail($email){
@@ -153,6 +152,18 @@ class Auth extends Base
         }
     }
     
+    public function deleteUser(){
+        $auth = new AuthService();
+        if(isset($_POST["id"])){
+            $userId = $_POST["id"];
+        }
+        $auth->deleteUserByID( $userId );
+        if($_SESSION["id"] == $userId){
+            $this->logout();
+        } else {
+            $this->renderUsers();
+        }
+    }
 
     public function renderSignup(): void{
         $this->renderPage("signup");
@@ -164,12 +175,12 @@ class Auth extends Base
 
     public function renderProfil(): void{
         $this->isAuth();
-        $this->renderPage( "user");
+        $this->renderPage( "user", "backoffice");
     }
 
     public function renderDashboard(): void {
         $this->isAuth();
-        $this->renderPage("dashboard");
+        $this->renderPage("dashboard", "backoffice");
     }   
     
     public function isAuth(){
@@ -177,6 +188,17 @@ class Auth extends Base
             $this->renderHome();
             exit;
         }
+    }
+
+    public function renderUsers() {
+        $auth = new AuthService();
+        $allusers = $auth->getAllUser();
+        $this->renderPage("allUser", "backoffice", ["users"=> $allusers]);
+
+    }
+
+    public function renderResetPassword(){
+        $this->renderPage("resetPassword");
     }
 }
 

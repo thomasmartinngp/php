@@ -6,15 +6,14 @@
     </ul>
 <?php endif; ?>
 
-<h2>Vous n'avez pas encore de compte ? <a href="/signup">S'inscrire</a></h2>
+<h2>Reset votre mdp</h2>
 <a href="/">Home Page</a>
+<a href="/login">Connection Page</a>
 
 <div class="form">
     <h2>Connection</h2>
-    <form method="POST" action="/signinUser">
+    <form method="POST" action="/sendResetPwdMail">
         <input type="email" value="<?= $_POST["email"] ?? "" ?>" required name="email" placeholder="Votre email"><br>
-        <input type="password" required name="pwd" placeholder="Votre mot de passe"><br>
-        <input class="btn btn_green" type="submit" value="Se connecter">
+        <input class="btn btn_green" type="submit" value="Reset le mdp">
     </form>
-    <a href="/resetPassword">Reset le mot de passe</a>
 </div>

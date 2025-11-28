@@ -2,6 +2,10 @@ h1{
     text-align: center;
 }
 
+header{
+    background-color: rgb(139, 217, 241);
+}
+
 .home{
     display: flex;
     flex-direction: column;
