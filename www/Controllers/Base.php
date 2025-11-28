@@ -24,10 +24,14 @@ class Base
         $render->render();
     }
 
-    public function setSessionData($userData){
-        $_SESSION['user_id'] = $userData['id'];
-        $_SESSION['name'] = $userData['name'];
-        $_SESSION['email'] = $userData['email'];
-        $_SESSION['is_active'] = $userData['is_active'];
+    public function setSessionData($userData) {
+    $keysToStore = ['id', 'name', 'email', 'is_active'];
+
+    foreach ($keysToStore as $key) {
+        if (isset($userData[$key])) { 
+            $_SESSION[$key] = $userData[$key];
+        }
     }
+}
+
 }

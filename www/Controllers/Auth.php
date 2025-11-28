@@ -17,37 +17,31 @@ class Auth extends Base
             !empty($_POST["pwd"]) &&
             count($_POST) == 2
         ){
-            $email = strtolower(trim($_POST['email']));
-
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $this->errors[]="Votre email n'est pas correct";
-            $this->renderPage("login", "frontoffice", $this->errors);
-            }else{
-                $auth = new AuthService();
-                $userId = $auth->getUserIdFromMail($email);
-                if($userId){
-                    $password = $_POST["pwd"];
-                    $passwordMatch = $auth->verifyPassword($email, $password);
-                    if($passwordMatch){
-                        $isActive = $auth->getIsActiveFromId($userId);
-                        if($isActive === true){
-                            $userData = $auth->getUserDataFromId($userId);
-                            $this->setSessionData($userData);
-                            var_dump($_SESSION);
-                            $this->renderPage("dashboard");
-                        } else {
-                            $this->errors[]="Votre compte n'est pas encore activé";
-                            $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
-                        } 
+            $email = $this->clearEmail($_POST["email"]);
+            $auth = new AuthService();
+            $userId = $auth->getUserIdFromMail($email);
+            if($userId){
+                $password = $_POST["pwd"];
+                $passwordMatch = $auth->verifyPassword($email, $password);
+                
+                if($passwordMatch){
+                    $isActive = $auth->getIsActiveFromId($userId);
+                    
+                    if($isActive === true){
+                        $userData = $auth->getUserDataFromId($userId["id"]);
+                        $this->setSessionData($userData);
+                        $this->renderPage("dashboard");
                     } else {
-                            $this->errors[]="Mot de passe incorrect";
-                            $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
-                        }
+                        $this->errors[]="Votre compte n'est pas encore activé";
+                        $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
+                    } 
                 } else {
-                    $this->errors[]= "L'email n'existe pas en bdd";
-                   $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
-                }
-            }   
+                        $this->errors[]="Mot de passe incorrect";
+                        $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
+                    }
+            } else {
+                $this->renderPage("login", "frontoffice", ["errors" => $this->errors]);
+            }  
         } else {
             echo "Tentative de XSS";
             $this->renderPage("login");
@@ -63,6 +57,10 @@ class Auth extends Base
         count($_POST) == 4
         ){
         $email = $this->clearEmail($_POST['email']);
+        $verifiyMail = new AuthService();
+        if($verifiyMail->verifyEmail($email)){
+            $this->errors[]= "L'email existe déjà en bdd";
+        } 
         $name = $this->clearName($_POST['name']);
 
         if(strlen($_POST["pwd"]) < 8 ||
@@ -119,14 +117,18 @@ class Auth extends Base
          if(!empty($_POST['name'])) {
             $name = $this->clearName( $_POST['name'] );
             if(empty($this->errors)){
-               
-                $auth->updateUserName( $name, $_SESSION["user_id"][0]);
+                $auth->updateUserName( $name, $_SESSION["id"]);
+                $value = ["name" => $name];
+                $this->setSessionData($value);
+                
             }
         }  
         if($_SESSION['email'] !== $_POST['email']){
             if(!empty($_POST['email'])){
                 $email = $this->clearEmail( $_POST['email'] );
-                $auth->updateUserEmail( $email, $_SESSION["user_id"][0]);
+                $auth->updateUserEmail( $email, $_SESSION["id"]);
+                $value = ["email" => $email];
+                $this->setSessionData($value);
             }
         }
         $this->renderPage("user");
@@ -137,12 +139,7 @@ class Auth extends Base
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $this->errors[]="Votre email n'est pas correct";
         }else{
-            $verifiyMail = new AuthService();
-            if($verifiyMail->verifyEmail($email)){
-                $this->errors[]= "L'email existe deja en bdd";
-            } else{
-                return $email;
-            }
+            return $email;
         }
     }
 

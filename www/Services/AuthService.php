@@ -4,13 +4,11 @@ namespace App\Service;
 
 use App\Core\Database;
 use App\Model\User;
+use App\Service\BaseService;
 
-class AuthService
+class AuthService extends BaseService
 {  
-    private $pdo;
-    public function __construct(){
-        $this->pdo = Database::getInstance()->getConnection();
-    }
+    
     public function createUser($data) {
         $user = new User();
         $user->setName($data['name']);
@@ -36,7 +34,7 @@ class AuthService
     public function getUserDataFromId($userId){
         $sql = 'SELECT email, name, is_active, id FROM "user" WHERE id=:id';
         $queryPrepared = $this->pdo->prepare($sql);
-        $queryPrepared->execute(["id" => (int)$userId['id']]);
+        $queryPrepared->execute(["id" => (int)$userId]);
         $user = $queryPrepared->fetch();
         return $user;
     }

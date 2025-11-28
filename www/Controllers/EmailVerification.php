@@ -41,8 +41,8 @@ class EmailVerification extends Base
             }
     }
 
-    public function sendRestPwdMail($email, $token){
-
+    public function sendResetPwdMail($email, $token){
+        
     }
 
     public function activateAccount(){
@@ -53,10 +53,7 @@ class EmailVerification extends Base
             $auth = new AuthService();
             $emailverificationService->activeAccount($userId);
             $userData = $auth->getUserDataFromId($userId);
-            $_SESSION['user_id'] = $userId;
-            $_SESSION['name'] = $userData['name'];
-            $_SESSION['email'] = $userData['email'];
-            $_SESSION['is_active'] = $userData['is_active'];
+            $this->setSessionData($userData);
         }
          $this->renderPage("dashboard");
     }
